@@ -1,3 +1,4 @@
+import com.mongodb.casbah.commons.MongoDBObject
 import com.mongodb.casbah.{MongoClient, MongoClientURI}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{DataFrame, SparkSession}
@@ -94,5 +95,13 @@ object Dataloader {
       .option("collection", TAG_COLLECTION_NAME)
       .format("com.mongodb.spark.sql")
       .save()
+
+    // create index
+    // MongoDBObject("mid" -> 1)： "mid" is the field, 1 means order ascending
+    mongoClient(config.db)(MOVIES_COLLECTION_NAME).createIndex(MongoDBObject("mid" -> 1))
+    mongoClient(config.db)(RATING_COLLECTION_NAME).createIndex(MongoDBObject("uid" -> 1))
+    mongoClient(config.db)(RATING_COLLECTION_NAME).createIndex(MongoDBObject("mid" -> 1))
+    mongoClient(config.db)(TAG_COLLECTION_NAME).createIndex(MongoDBObject("uid" -> 1))
+    mongoClient(config.db)(RATING_COLLECTION_NAME).createIndex(MongoDBObject("mid" -> 1))
   }
 }
