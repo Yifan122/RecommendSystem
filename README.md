@@ -13,3 +13,25 @@
 - Kafka: 2.12
 - Redis: 4.0.2
 - Spark: 2.1.1
+
+### 数据模型：
+
+1. Movie表（从testfiles/movies.csv 中导入）
+
+   | 字段名   | 字段类型 | 字段描述     |
+   | -------- | -------- | ------------ |
+   | mid      | int      | 电影的ID     |
+   | name     | String   | 电影的名称   |
+   | desci    | String   | 电影的描述   |
+   | timelong | String   | 电影时长     |
+   | shoot    | String   | 电影拍摄时间 |
+   | issue    | String   | 电影发布时间 |
+   | language | String   | 电影语言     |
+   | genres   | String   | 电影所属类别 |
+   | director | String   | 电影导演     |
+   | actors   | String   | 电影演员     |
+
+   
+2. Rating表（用户评分表，从testfiles/ratings.csv中导入）
+
+3. Tag表（标签表，从testfiles/tags.csv中导入）
