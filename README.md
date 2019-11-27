@@ -32,6 +32,25 @@
    | actors   | String   | 电影演员     |
 
    
+   
 2. Rating表（用户评分表，从testfiles/ratings.csv中导入）
 
+   | 字段名    | 字段类型 | 字段描述   |
+   | --------- | -------- | ---------- |
+   | uid       | int      | 用户的ID   |
+   | mid       | int      | 电影的ID   |
+   | score     | double   | 电影的评分 |
+   | timestamp | long     | 评分的时间 |
+
+   
+
 3. Tag表（标签表，从testfiles/tags.csv中导入）
+
+   | 字段名    | 字段类型 | 字段描述   |
+   | --------- | -------- | ---------- |
+   | uid       | int      | 用户的ID   |
+   | mid       | int      | 电影的ID   |
+   | tag       | String   | 电影的标签 |
+   | timestamp | long     | 评分的时间 |
+
+### 
