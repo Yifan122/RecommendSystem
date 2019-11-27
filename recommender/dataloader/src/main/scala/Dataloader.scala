@@ -1,10 +1,16 @@
+import com.mongodb.casbah.{MongoClient, MongoClientURI}
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 /**
  * Load data into MongoDB and ElasticSearch
  */
 object Dataloader {
+  // MongoDB collections
+  val MOVIES_COLLECTION_NAME = "Movie"
+  val RATING_COLLECTION_NAME = "Rating"
+  val TAG_COLLECTION_NAME = "Tag"
+
   def main(args: Array[String]): Unit = {
     // TEST file path, change it to your path
     val DATAFILE_MOVIES = "E:\\Users\\Larry\\IdeaProjects\\RecommendSystem\\testfiles\\movies.csv"
@@ -14,6 +20,11 @@ object Dataloader {
     // Parameters
     val params = scala.collection.mutable.Map[String, Any]()
     params += "spark.cores" ->  "local[2]"
+    params += "mongo.uri" -> "mongodb://bigdata112:27017/recom"
+    params += "mongo.db" -> "recom"
+
+    // generate MongoConfig
+    implicit val mongoConfig = new MongoConfig(params("mongo.uri").asInstanceOf[String], params("mongo.db").asInstanceOf[String])
 
     // Spark Configuration
     val config = new SparkConf().setAppName("DataLoader")
@@ -43,10 +54,45 @@ object Dataloader {
       Tag(x(0).trim.toInt, x(1).trim.toInt, x(2).trim, x(3).trim.toInt)
     }).toDF
 
-    // show the result
-//    movieDF.show(2)
-//    ratingDF.show(2)
-//    tagDF.show(2)
+    // Store the data into MongoDB
+    storeDataintoMango(movieDF, ratingDF, tagDF)
+  }
 
+
+  /**
+   * Store the data into Mango
+   *
+   * @param movieDF
+   * @param ratingDF
+   * @param tagDF
+   */
+  def storeDataintoMango(movieDF: DataFrame, ratingDF: DataFrame, tagDF: DataFrame)(implicit config: MongoConfig): Unit = {
+
+    // Create mongoDB connection
+    val mongoClient = MongoClient(MongoClientURI(config.uri))
+
+    // Drop the collection if it exists
+    mongoClient(config.db)(MOVIES_COLLECTION_NAME).dropCollection()
+    mongoClient(config.db)(RATING_COLLECTION_NAME).dropCollection()
+    mongoClient(config.db)(TAG_COLLECTION_NAME).dropCollection()
+
+    // Write the data to database
+    movieDF.write
+      .option("uri", config.uri)
+      .option("collection", MOVIES_COLLECTION_NAME)
+      .format("com.mongodb.spark.sql")
+      .save()
+
+    ratingDF.write
+      .option("uri", config.uri)
+      .option("collection", RATING_COLLECTION_NAME)
+      .format("com.mongodb.spark.sql")
+      .save()
+
+    tagDF.write
+      .option("uri", config.uri)
+      .option("collection", TAG_COLLECTION_NAME)
+      .format("com.mongodb.spark.sql")
+      .save()
   }
 }

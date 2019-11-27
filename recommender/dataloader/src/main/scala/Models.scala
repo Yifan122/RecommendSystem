@@ -33,3 +33,11 @@ case class Rating(val uid:Int,val mid:Int,val score:Double,val timestamp:Int)
  * @param timestamp create time
  */
 case class Tag(val uid:Int,val mid:Int,val tag:String,val timestamp:Int)
+
+/**
+ * Mongo Configuration
+ *
+ * @param uri
+ * @param db
+ */
+case class MongoConfig(val uri: String, val db: String)
