@@ -49,9 +49,12 @@ object StatisticsApp extends App {
 
   // Calculate the rating number for each movie, and order them in descending order
   // store the result into mongodb
-  //  StatisticAlgorithm.rateRank(spark)
+  StatisticAlgorithm.rateRank(spark)
 
-  //  StatisticAlgorithm.rateRankByMonth(spark)
+  // Get the top movies according to the popularity by month
+  StatisticAlgorithm.rateRankByMonth(spark)
+
+  // Get the top movies according to the score by genres
   StatisticAlgorithm.rankMovieByGenre(spark, ALL_GENRES)(movies)
 
   spark.stop()

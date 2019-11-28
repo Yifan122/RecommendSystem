@@ -55,6 +55,14 @@ object StatisticAlgorithm {
       .save()
   }
 
+  /**
+   * Get the top movie in each genres
+   *
+   * @param spark  Spark Session
+   * @param genres Genres List
+   * @param movies Movie Datasets
+   * @param config MongoDB configuration
+   */
   def rankMovieByGenre(spark: SparkSession, genres: List[String])(movies: Dataset[Movie])(implicit config: MongoConfig): Unit = {
     // Calculate the average score for each movie
     val averageMovieScoreDF = spark.sql("select mid, avg(score) as avg from ratings group by mid").cache()
