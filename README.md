@@ -18,8 +18,8 @@
 
 1. [离线推荐部分(Offline]: https://github.com/Yifan122/RecommendSystem/tree/master/recommender/statisticsRecommender
 
-   ​    **离线统计服务：** 批处理统计性业务采用Spark Core + Spark SQL 进行实现，实现对指标类数据的统计任务。
-     **离线推荐服务：**离线推荐业务采用Spark Core + Spark MLlib 进行实现，采用ALS 算法进行实现。
+   ​    **离线统计服务**： 批处理统计性业务采用Spark Core + Spark SQL 进行实现，实现对指标类数据的统计任务。
+        **离线推荐服务**：离线推荐业务采用Spark Core + Spark MLlib 进行实现，采用ALS 算法进行实现。
    ​    **工作调度服务**：对于离线推荐部分需要以一定的时间频率对算法进行调度， 采用Azkaban 进行任务的调度。
 
 2. #### 实时推荐部分(Online Recommender System)
