@@ -23,7 +23,7 @@ case class Movie(val mid: Int, val name: String, val descri: String, val timelon
  * @param score     score
  * @param timestamp create time
  */
-case class Rating(val uid: Int, val mid: Int, val score: Double, val timestamp: Int)
+case class MovieRating(val uid: Int, val mid: Int, val score: Double, val timestamp: Int)
 
 /**
  *
@@ -58,3 +58,11 @@ case class Recommendation(mid: Int, score: Double)
  */
 case class GenresRecommendations(genre: String, recommendations: Seq[Recommendation])
 
+/**
+ * Store the recommendation for each uses
+ * according to the Collaborative filtering algorithm
+ *
+ * @param userId
+ * @param recommendations
+ */
+case class UserRecommendations(userId: Int, recommendations: Seq[Recommendation])

@@ -57,6 +57,10 @@ object StatisticsApp extends App {
   // Get the top movies according to the score by genres
   StatisticAlgorithm.rankMovieByGenre(spark, ALL_GENRES)(movies)
 
+  // Release the memory
+  ratings.unpersist()
+  movies.unpersist()
+
   spark.stop()
 
 }
