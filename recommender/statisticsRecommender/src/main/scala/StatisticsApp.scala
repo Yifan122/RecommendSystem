@@ -7,6 +7,11 @@ object StatisticsApp extends App {
   val RATING_COLLECTION_NAME = "Rating"
   val TAG_COLLECTION_NAME = "Tag"
 
+  // All genres
+  val ALL_GENRES = List[String]("War", "Fantasy", "Western", "Musical", "Horror", "IMAX", "Crime", "Animation", "Children", "Sci-Fi",
+    "Comedy", "Documentary", "Mystery", "Thriller", "Adventure", "Romance", "Drama", "Film-Noir", "Action")
+
+
   // Set the general parameters
   val params = scala.collection.mutable.Map[String, Any]()
   params += "spark.cores" -> "local[2]"
@@ -44,7 +49,10 @@ object StatisticsApp extends App {
 
   // Calculate the rating number for each movie, and order them in descending order
   // store the result into mongodb
-  StatisticAlgorithm.rateRank(spark)
+  //  StatisticAlgorithm.rateRank(spark)
+
+  //  StatisticAlgorithm.rateRankByMonth(spark)
+  StatisticAlgorithm.rankMovieByGenre(spark, ALL_GENRES)(movies)
 
   spark.stop()
 

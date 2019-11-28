@@ -37,7 +37,23 @@ case class Tag(val uid: Int, val mid: Int, val tag: String, val timestamp: Int)
 /**
  * Mongo Configuration
  *
- * @param uri
- * @param db
+ * @param uri database uri
+ * @param db  database name
  */
 case class MongoConfig(val uri: String, val db: String)
+
+/**
+ * Store the movie and it's score
+ *
+ * @param mid   movie id
+ * @param score movie score
+ */
+case class Recommendation(mid: Int, score: Double)
+
+/**
+ * Store the top movies in each genre
+ *
+ * @param genre           genre
+ * @param recommendations top movies
+ */
+case class GenresRecommendations(genre: String, recommendations: Seq[Recommendation])
