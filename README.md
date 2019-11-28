@@ -16,16 +16,16 @@
 
 ### 推荐系统：
 
-1. #### 离线推荐部分(Offline)[离线推荐部分(Offline]: https://github.com/Yifan122/RecommendSystem/tree/master/recommender/statisticsRecommender
+1. #### [离线推荐部分(Offline)](https://github.com/Yifan122/RecommendSystem/tree/master/recommender/statisticsRecommender)
 
-   ​    **离线统计服务**： 批处理统计性业务采用Spark Core + Spark SQL 进行实现，实现对指标类数据的统计任务。
-        **离线推荐服务**：离线推荐业务采用Spark Core + Spark MLlib 进行实现，采用ALS 算法进行实现。
+   ​    **离线统计服务**： 批处理统计性业务采用Spark Core + Spark SQL 进行实现，实现对指标类数据的统计任务。<br/>
+        **离线推荐服务**：离线推荐业务采用Spark Core + Spark MLlib 进行实现，采用ALS 算法进行实现。<br/>
    ​    **工作调度服务**：对于离线推荐部分需要以一定的时间频率对算法进行调度， 采用Azkaban 进行任务的调度。
 
 2. #### 实时推荐部分(Online Recommender System)
 
-   ​    **日志采集服务**：通过利用Flume-ng 对业务平台中用户对于电影的一次评分行为进行采集，实时发送到Kafka 集群。
-   ​    **消息缓冲服务**： 项目采用Kafka 作为流式数据的缓存组件， 接受来自Flume 的数据采集请求。并将数据推送到项目的实时推荐系统部分。
+   ​    **日志采集服务**：通过利用Flume-ng 对业务平台中用户对于电影的一次评分行为进行采集，实时发送到Kafka 集群。<br/>
+   ​    **消息缓冲服务**： 项目采用Kafka 作为流式数据的缓存组件， 接受来自Flume 的数据采集请求。并将数据推送到项目的实时推荐系统部分。<br/>
    ​    **实时推荐服务**：项目采用Spark Streaming 作为实时推荐系统，通过接收Kafka 中缓存的数据， 通过设计的推荐算法实现对实时推荐的数据处理， 并将结构合并更新到MongoDB 数据
    库。
 
