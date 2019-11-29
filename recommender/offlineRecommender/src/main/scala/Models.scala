@@ -62,7 +62,15 @@ case class GenresRecommendations(genre: String, recommendations: Seq[Recommendat
  * Store the recommendation for each uses
  * according to the Collaborative filtering algorithm
  *
- * @param userId
- * @param recommendations
+ * @param userId          user ID
+ * @param recommendations top movies
  */
 case class UserRecommendations(userId: Int, recommendations: Seq[Recommendation])
+
+/**
+ * Store the movies similarity
+ *
+ * @param movieId         movie ID
+ * @param recommendations top movies
+ */
+case class MovieSimilaritys(movieId: Int, recommendations: Seq[Recommendation])

@@ -1,8 +1,11 @@
 import org.apache.spark.SparkConf
 import org.apache.spark.mllib.recommendation.{ALS, Rating}
 import org.apache.spark.sql.SparkSession
+import org.jblas.DoubleMatrix
 
 object OfflineRecommender {
+
+
   // MongoDB collections
   val MOVIES_COLLECTION_NAME = "Movie"
   val RATING_COLLECTION_NAME = "Rating"
@@ -10,8 +13,10 @@ object OfflineRecommender {
 
   // The collection to store the Collaborative filtering result
   val USER_RECOMMENDATIONS_COLLECTION_NAME = "UserRecommendations"
+  val MOVIE_SIMILARITIES_COLLECTION_NAME = "MovieSimilarities"
 
   val USER_MAX_RECOMMENDATION = 10
+  val MOVIE_MAX_RECOMMENDATION = 10
 
   def main(args: Array[String]): Unit = {
     // Set the general parameters
@@ -83,6 +88,39 @@ object OfflineRecommender {
       .format("com.mongodb.spark.sql")
       .save()
 
+    // Calculate the movie similarity matrix
+
+    // Movie product features matrix
+    val movieFeatures = model.productFeatures //(Int, Array[Double])
+      .map {
+        case (mid, features) => (mid, new DoubleMatrix(features))
+      }
+
+    // Calculate similarity
+    val movieSimilarities = movieFeatures.cartesian(movieFeatures)
+      .filter {
+        case (a, b) => a._1 != b._1
+      }.map {
+      case (a, b) => {
+        val simScore = this.consineSimilarity(a._2, b._2)
+        (a._1, (b._1, simScore))
+      }
+    }.filter(_._2._2 > 0.6)
+      .groupByKey()
+      .map {
+        case (mid, items) => {
+          MovieSimilaritys(mid, items.toList.sortWith(_._2 > _._2).map(x => Recommendation(x._1, x._2)))
+        }
+      }.toDF
+
+
+    movieSimilarities.write
+      .option("uri", mongoConfig.uri)
+      .option("collection", MOVIE_SIMILARITIES_COLLECTION_NAME)
+      .mode("overwrite")
+      .format("com.mongodb.spark.sql")
+      .save()
+
     // Release the memory
     movieRating.unpersist()
     movies.unpersist()
@@ -91,5 +129,7 @@ object OfflineRecommender {
     spark.close()
   }
 
-
+  def consineSimilarity(movie1: DoubleMatrix, movie2: DoubleMatrix): Double = {
+    movie1.dot(movie2) / (movie1.norm2() * movie2.norm2())
+  }
 }
